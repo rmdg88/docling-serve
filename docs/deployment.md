@@ -6,6 +6,7 @@ Choose the deployment option that best fits your setup.
 
 - **[Local GPU NVIDIA](#local-gpu-nvidia)**: For deploying the application locally on a machine with a supported NVIDIA GPU (using Docker Compose).
 - **[Local GPU AMD](#local-gpu-amd)**: For deploying the application locally on a machine with a supported AMD GPU (using Docker Compose).
+- **[Local GPU INTEL](#local-gpu-intel)**: For deploying the application locally on a machine with a supported INTEL GPU (using Docker Compose).
 - **[OpenShift](#openshift)**: For deploying the application on an OpenShift cluster, designed for cloud-native environments.
 
 ---
@@ -189,6 +190,74 @@ Docs:
     make docling-serve-rocm-image
     ```
 
+</details>
+
+## Local GPU INTEL
+
+### Docker compose
+
+Manifest example: [compose-intel.yaml](./deploy-examples/compose-intel.yaml)
+
+This deployment has the following features:
+
+- INTEL XPU enabled
+
+Install the app with:
+
+```sh
+docker compose -f docs/deploy-examples/compose-intel.yaml up -d
+```
+
+For using the API:
+
+```sh
+# Make a test query
+curl -X 'POST' \
+  "localhost:5001/v1/convert/source/async" \
+  -H "accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "http_sources": [{"url": "https://arxiv.org/pdf/2501.17887"}]
+  }'
+```
+
+<details>
+<summary><b>Requirements</b></summary>
+
+- debian/ubuntu/rhel/fedora/opensuse
+- docker
+- Intel GPU driver >= 20.40
+- Intel oneAPI >= 2023.x (includes Level Zero and DPC++)
+
+Docs:
+
+- [Intel oneAPI installation](https://software.intel.com/content/www/us/en/develop/tools/oneapi.html)
+
+</details>
+
+<details>
+<summary><b>Steps</b></summary>
+
+1. Check driver version and which GPU you want to use 0/1/2/n (and update [compose-intel.yaml](./deploy-examples/compose-intel.yaml) file)
+    
+    ```sh
+    lspci | grep -i intel
+    # Check Intel GPU version
+    dpcpp --version
+    ```
+
+2. Find both video group GID and render group GID from host (and update [compose-intel.yaml](./deploy-examples/compose-intel.yaml) file)
+
+    ```sh
+    getent group video
+    getent group render
+    ```
+
+3. Build the image locally (and update [compose-intel.yaml](./deploy-examples/compose-intel.yaml) file)
+
+    ```sh
+    make docling-serve-xpu-image
+    ```
 </details>
 
 ## OpenShift

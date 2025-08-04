@@ -75,6 +75,16 @@ cd docling-serve/
 make docling-serve-rocm-image
 ```
 
+An image for Intel XPU (`docling-serve-xpu`) is supported but **not published** due to its large size.
+
+To build it locally:
+
+```bash
+git clone --branch main git@github.com:docling-project/docling-serve.git
+cd docling-serve/
+make docling-serve-xpu-image
+```
+
 For deployment using Docker Compose, see [docs/deployment.md](docs/deployment.md).
 
 Coming soon: `docling-serve-slim` images will reduce the size by skipping the model weights download.

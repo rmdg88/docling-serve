@@ -20,6 +20,7 @@ Kubeflow
 (?i)CUDA
 (?i)NVIDIA
 (?i)ROCm
+(?i)XPU
 (?i)env
 Gradio
 bool

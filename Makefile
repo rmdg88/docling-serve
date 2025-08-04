@@ -67,6 +67,13 @@ docling-serve-rocm-image: Containerfile ## Build docling-serve container image w
 	$(CMD_PREFIX) docker tag ghcr.io/docling-project/docling-serve-rocm:$(TAG) ghcr.io/docling-project/docling-serve-rocm:$(BRANCH_TAG)
 	$(CMD_PREFIX) docker tag ghcr.io/docling-project/docling-serve-rocm:$(TAG) quay.io/docling-project/docling-serve-rocm:$(BRANCH_TAG)
 
+.PHONY: docling-serve-xpu-image
+docling-serve-xpu-image: Containerfile ## Build docling-serve container image with XPU support
+	$(ECHO_PREFIX) printf "  %-12s Containerfile\n" "[docling-serve with XPU ]"
+	$(CMD_PREFIX) docker build --load --build-arg "UV_SYNC_EXTRA_ARGS=--no-group pypi --group xpu --no-extra flash-attn" -f Containerfile --platform linux/amd64 -t ghcr.io/docling-project/docling-serve-xpu:$(TAG) .
+	$(CMD_PREFIX) docker tag ghcr.io/docling-project/docling-serve-xpu:$(TAG) ghcr.io/docling-project/docling-serve-xpu:$(BRANCH_TAG)
+	$(CMD_PREFIX) docker tag ghcr.io/docling-project/docling-serve-xpu:$(TAG) quay.io/docling-project/docling-serve-xpu:$(BRANCH_TAG)
+
 .PHONY: action-lint
 action-lint: .action-lint ##      Lint GitHub Action workflows
 .action-lint: $(shell find .github -type f) | action-lint-file
@@ -135,3 +142,10 @@ run-docling-rocm: ## Run the docling-serve container with GPU support and assign
 	$(CMD_PREFIX) docker rm -f docling-serve-rocm 2>/dev/null || true
 	$(ECHO_PREFIX) printf "  %-12s Running docling-serve container with GPU support on port 5001...\n" "[RUN ROCm 6.3]"
 	$(CMD_PREFIX) docker run -it --name docling-serve-rocm -p 5001:5001 ghcr.io/docling-project/docling-serve-rocm:main
+
+.PHONY: run-docling-xpu
+run-docling-xpu: ## Run the docling-serve container with GPU support and assign a container name
+	$(ECHO_PREFIX) printf "  %-12s Removing existing container if it exists...\n" "[CLEANUP]"
+	$(CMD_PREFIX) docker rm -f docling-serve-xpu 2>/dev/null || true
+	$(ECHO_PREFIX) printf "  %-12s Running docling-serve container with GPU support on port 5001...\n" "[RUN XPU]"
+	$(CMD_PREFIX) docker run -it --name docling-serve-xpu -p 5001:5001 ghcr.io/docling-project/docling-serve-xpu:main

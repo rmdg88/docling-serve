@@ -1,0 +1,18 @@
+# Intel XPU deployment
+
+services:
+  docling-serve:
+    image: ghcr.io/docling-project/docling-serve-xpu:main
+    container_name: docling-serve
+    ports:
+      - "5001:5001"
+    environment:
+      DOCLING_SERVE_ENABLE_UI: "true"
+      ZE_ENABLE_PCI_ID_DEVICE_ORDER: "1"  # Optional: order devices by PCI ID
+      ONEAPI_DEVICE_SELECTOR: "level_zero:gpu"  # Select Intel GPU
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - 44    # video group GID from host
+      - 992   # render group GID from host
+    restart: always
