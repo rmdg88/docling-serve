@@ -65,7 +65,7 @@ The following container images are available for running **Docling Serve** with 
 
 #### 🚫 Not Distributed
 
-An image for AMD ROCm 6.3 (`docling-serve-rocm`) is supported but **not published** due to its large size.
+An image for AMD ROCm 6.3 (`docling-serve-rocm`) is supported but **not published**.
 
 To build it locally:
 
@@ -75,7 +75,7 @@ cd docling-serve/
 make docling-serve-rocm-image
 ```
 
-An image for Intel XPU (`docling-serve-xpu`) is supported but **not published** due to its large size.
+An image for Intel XPU (`docling-serve-xpu`) is supported but **not published**.
 
 To build it locally:
 
