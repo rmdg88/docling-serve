@@ -50,7 +50,7 @@ dependencies = [
 
 [project.optional-dependencies]
 ui = [
-    "gradio~=5.23.2",
+    "gradio~=5.46.0",
 ]
 tesserocr = [
     "tesserocr~=2.7"
